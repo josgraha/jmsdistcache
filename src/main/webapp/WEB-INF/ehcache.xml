@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://ehcache.sf.net/ehcache.xsd">
+
+    <diskStore path="java.io.tmpdir"/>
+
+    <cacheManagerPeerProviderFactory
+            class="net.sf.ehcache.distribution.jms.JMSCacheManagerPeerProviderFactory"
+            properties="initialContextFactoryName=app.main.service.jms.AppActiveMQInitialContextFactory,
+                        providerURL=tcp://localhost:61616,
+                        replicationTopicConnectionFactoryBindingName=topicConnectionFactory,
+                        replicationTopicBindingName=ehcache,
+                        getQueueConnectionFactoryBindingName=queueConnectionFactory,
+                        getQueueBindingName=ehcacheGetQueue,
+                        topicConnectionFactoryBindingName=topicConnectionFactory,
+                        topicBindingName=ehcache"
+            propertySeparator=","/>
+    <defaultCache eternal="true" maxElementsInMemory="100"
+                  overflowToDisk="false"/>
+
+    <cache name="employees" eternal="false" maxElementsInMemory="1000"
+           overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+           timeToLiveSeconds="500" memoryStoreEvictionPolicy="LRU" statistics="true">
+
+        <cacheEventListenerFactory
+                class="net.sf.ehcache.distribution.jms.JMSCacheReplicatorFactory"
+                properties="replicateAsynchronously=true,
+                  replicatePuts=true,
+                  replicateUpdates=true,
+                  replicateUpdatesViaCopy=true,
+                  replicateRemovals=true,
+                  asynchronousReplicationIntervalMillis=1000"
+                propertySeparator="," />
+
+            <cacheLoaderFactory
+                class="net.sf.ehcache.distribution.jms.JMSCacheLoaderFactory"
+                properties="initialContextFactoryName=app.main.service.jms.AppActiveMQInitialContextFactory,
+                    providerURL=tcp://localhost:61616,
+                    replicationTopicConnectionFactoryBindingName=topicConnectionFactory,
+                    getQueueConnectionFactoryBindingName=queueConnectionFactory,
+                    replicationTopicBindingName=ehcache,
+                    getQueueBindingName=ehcacheGetQueue,
+                    timeoutMillis=10000"/>
+    </cache>
+    <!-- cache name="messageCache" maxElementsInMemory="1000" eternal="false"
+           timeToIdleSeconds="1000" timeToLiveSeconds="1000" overflowToDisk="false">
+
+        <cacheEventListenerFactory
+                class="net.sf.ehcache.distribution.jms.JMSCacheReplicatorFactory"
+                properties="replicateAsynchronously=true,
+                    replicatePuts=true,
+                    replicateUpdates=true,
+                    replicateUpdatesViaCopy=true,
+                    replicateRemovals=true,
+                    asynchronousReplicationIntervalMillis=1000"
+                propertySeparator=","/>
+
+        <cacheLoaderFactory
+                    class="net.sf.ehcache.distribution.jms.JMSCacheLoaderFactory"
+                    properties="initialContextFactoryName=app.main.service.jms.AppActiveMQInitialContextFactory,
+                    providerURL=tcp://localhost:61616,
+                    replicationTopicConnectionFactoryBindingName=topicConnectionFactory,
+                    getQueueConnectionFactoryBindingName=queueConnectionFactory,
+                    replicationTopicBindingName=ehcache,
+                    getQueueBindingName=ehcacheGetQueue,
+                    timeoutMillis=10000"/>
+    </cache -->
+
+</ehcache>
