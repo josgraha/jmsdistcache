@@ -1,8 +1,6 @@
-# hedgerepo
+# JMSDistCache
 
-I'm an app. Or maybe I'm a library? I haven't decided yet. 
-
-The choice is up to you!
+Simple webapp grabbed from Spring Examples to demonstrate JMS cache replication.  If working correctly one server should fetch from db and populate cache while another server will receive the update via JMS and operate in "cache-only" mode.
 
 ## Setup
 * start mysql
