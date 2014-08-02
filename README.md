@@ -11,13 +11,15 @@ Simple webapp grabbed from Spring Examples to demonstrate JMS cache replication.
 ## Usage
 
 run server 1 using run_server_XX script \<port1\>
+
 edit spring-context.xml
+
 set property of p:cacheOnly="true"
 
 run server 2 using run_server_XY script \<port2\>
 
 load the entry via cache only via webservice on server 1
-http://localhost:<port2>/jmsdistcache/employee/1
+http://localhost:\<port2\>/jmsdistcache/employee/1
 
 ### Expected Result:
 No value
